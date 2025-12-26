@@ -1,38 +1,33 @@
 const express = require("express");
 const cors = require("cors");
 
+// ✅ Load env FIRST (important)
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
 const authRoutes = require("./routes/auth.routes");
 const articleRoutes = require("./routes/article.routes");
-
-const authMiddleware = require("./middlewares/auth.middleware");
 const categoryRoutes = require("./routes/category.routes");
+const authMiddleware = require("./middlewares/auth.middleware");
 
 const app = express();
-
-
-require("dotenv").config();
 
 // ===== Global Middlewares =====
 app.use(cors());
 app.use(express.json());
 
 // ===== Routes =====
-
-// Auth routes (register, login)
 app.use("/api/auth", authRoutes);
-
-// Article routes (CRUD)
 app.use("/api/articles", articleRoutes);
-
-// Category routes (CRUD)
 app.use("/api/categories", categoryRoutes);
 
-// Health check / public route
+// Health check
 app.get("/", (req, res) => {
   res.send("Knowledge Base API running");
 });
 
-// Protected test route (JWT check)
+// Protected test route
 app.get("/api/protected", authMiddleware, (req, res) => {
   res.json({
     message: "You accessed a protected route",
@@ -40,4 +35,9 @@ app.get("/api/protected", authMiddleware, (req, res) => {
   });
 });
 
-module.exports = app;
+// ✅ START SERVER (THIS FIXES THE CRASH)
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
