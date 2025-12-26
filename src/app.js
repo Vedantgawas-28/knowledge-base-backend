@@ -12,9 +12,21 @@ const categoryRoutes = require("./routes/category.routes");
 const authMiddleware = require("./middlewares/auth.middleware");
 
 const app = express();
-
+const express = require("express");
+const cors = require("cors");
 // ===== Global Middlewares =====
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "https://knowledge-base-frontend-mi9z.onrender.com",
+      "http://localhost:3000"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
+  })
+);
+app.options("*", cors());
 app.use(express.json());
 
 // ===== Routes =====
