@@ -12,8 +12,10 @@ const categoryRoutes = require("./routes/category.routes");
 const authMiddleware = require("./middlewares/auth.middleware");
 
 const app = express();
+
 const express = require("express");
 const cors = require("cors");
+
 // ===== Global Middlewares =====
 app.use(
   cors({
